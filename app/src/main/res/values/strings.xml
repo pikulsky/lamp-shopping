@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">LampShopping</string>
+    <string name="enter_barcode">Enter a barcode</string>
+    <string name="search_barcode">Search</string>
+    <string name="unknown_barcode">Barcode %s not found</string>
+    <string name="enter_another_barcode">Another barcode</string>
+</resources>
