@@ -4,4 +4,11 @@
     <string name="search_barcode">Search</string>
     <string name="unknown_barcode">Barcode %s not found</string>
     <string name="enter_another_barcode">Another barcode</string>
+    <string name="choose_formats">Choose Formats</string>
+    <string name="select_camera">Select a Camera</string>
+    <string name="ok_button">OK</string>
+    <string name="cancel_button">Cancel</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

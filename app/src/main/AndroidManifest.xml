@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.bavers.lamping.lampshopping">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.bavers.lamping.lampshopping">
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -16,21 +16,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".UnknownBarcodeActivity"
-            android:parentActivityName=".EnterBarcodeActivity" >
+        <activity
+            android:name=".UnknownBarcodeActivity"
+            android:parentActivityName=".EnterBarcodeActivity">
+
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".EnterBarcodeActivity" />
         </activity>
-        <activity android:name=".LampDetailsActivity"
-            android:parentActivityName=".EnterBarcodeActivity" >
+        <activity
+            android:name=".LampDetailsActivity"
+            android:parentActivityName=".EnterBarcodeActivity">
+
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".EnterBarcodeActivity" />
         </activity>
-        <activity android:name=".HistoryActivity"></activity>
+        <activity android:name=".HistoryActivity" />
+        <activity android:name=".BaseScannerActivity" />
+        <activity android:name=".ScanningActivity"></activity>
     </application>
 
 </manifest>

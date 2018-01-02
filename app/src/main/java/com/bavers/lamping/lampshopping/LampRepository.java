@@ -4,11 +4,12 @@ package com.bavers.lamping.lampshopping;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-public class LampRepository
+public class LampRepository implements Serializable
 {
     private HashMap<String, HashSet<Lamp>> lamps;
 
@@ -27,6 +28,11 @@ public class LampRepository
             lamps.put(lamp.barcode, s);
         }
 
+    }
+
+    public boolean containsBarcode(String barcode) {
+
+        return lamps.containsKey(barcode);
     }
 
     public Lamp getLampByBarcode(String barcode) {
