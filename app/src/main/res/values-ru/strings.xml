@@ -5,4 +5,11 @@
     <string name="search_barcode">Поиск</string>
     <string name="unknown_barcode">Штрих-код %s не найден</string>
     <string name="enter_another_barcode">Другой штрих-код</string>
+
+    <string name="menu_scan">Сканер</string>
+    <string name="menu_type">Ввод</string>
+    <string name="menu_history">История</string>
+
+
+
 </resources>

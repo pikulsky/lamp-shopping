@@ -9,7 +9,14 @@ import com.google.zxing.Result;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 public class ScanningActivity extends BaseScannerActivity implements ZXingScannerView.ResultHandler {
+
+    public static final String EXTRA_SCANS = "com.bavers.lamping.lampshopping.SCANS";
+
     private ZXingScannerView mScannerView;
+
+    /**
+     * List of scans
+     */
     private ScanRepository scans = new ScanRepository();
 
     @Override
@@ -36,19 +43,32 @@ public class ScanningActivity extends BaseScannerActivity implements ZXingScanne
         mScannerView.stopCamera();
     }
 
+    private void startHistoryActivity() {
+
+        Intent intent = new Intent(this, HistoryActivity.class);
+        intent.putExtra(EXTRA_SCANS, scans);
+        startActivity(intent);
+    }
+
     @Override
     public void handleResult(Result rawResult) {
-
 
         Intent intent = getIntent();
         LampRepository lamps = (LampRepository) intent.getSerializableExtra(EnterBarcodeActivity.EXTRA_LAMPS);
 
         String barcode = rawResult.getText();
+
+        if (barcode.equals("111")) {
+            startHistoryActivity();
+            return;
+        }
+
+
         Scan scan = Scan.fromBarcode(barcode);
         if (lamps.containsBarcode(barcode)){
             Lamp lamp = lamps.getLampByBarcode(barcode);
-            scan.isFound = true;
-            scan.foundLamps.add(lamp);
+            scan.setLamp(lamp);
+
             String message = "Found lamp for barcode" + barcode;
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         } else {

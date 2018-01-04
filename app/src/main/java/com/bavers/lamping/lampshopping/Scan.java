@@ -19,7 +19,11 @@ public class Scan {
         scan.barcode = barcode;
         scan.isFound = false;
         scan.foundLamps = new HashSet<Lamp>();
-        // scan.foundLamps.add();
         return scan;
+    }
+
+    public void setLamp(Lamp lamp) {
+        isFound = true;
+        foundLamps.add(lamp);
     }
 }

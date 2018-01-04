@@ -92,6 +92,13 @@ public class EnterBarcodeActivity extends AppCompatActivity {
 
     private void startScanningActivity() {
 
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA}, ZXING_CAMERA_PERMISSION);
+        }
+
         Intent intent = new Intent(this, ScanningActivity.class);
         intent.putExtra(EXTRA_LAMPS, lamps);
         startActivity(intent);
