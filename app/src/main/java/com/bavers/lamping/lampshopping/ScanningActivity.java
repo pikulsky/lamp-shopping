@@ -58,11 +58,10 @@ public class ScanningActivity extends BaseScannerActivity implements ZXingScanne
 
         String barcode = rawResult.getText();
 
-        if (barcode.equals("111")) {
+        if (barcode.equals("12627613")) {
             startHistoryActivity();
             return;
         }
-
 
         Scan scan = Scan.fromBarcode(barcode);
         if (lamps.containsBarcode(barcode)){

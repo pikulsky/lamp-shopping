@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/action_scan"
         android:title="@string/menu_scan"
-        android:icon="@drawable/ic_camera_black_24px" />
+        android:icon="@drawable/ic_barcode_scan" />
     <item android:id="@+id/action_type"
         android:title="@string/menu_type"
         android:icon="@drawable/ic_dialpad_black_24px" />
