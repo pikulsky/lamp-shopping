@@ -1,5 +1,6 @@
 package com.bavers.lamping.lampshopping;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 
@@ -7,7 +8,7 @@ import java.util.HashSet;
  * Scan class describes the scan
  */
 
-public class Scan {
+public class Scan implements Serializable {
     public Date scanDate;
     public String barcode;
     public boolean isFound;

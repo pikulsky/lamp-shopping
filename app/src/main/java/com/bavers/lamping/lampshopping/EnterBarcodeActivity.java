@@ -17,13 +17,16 @@ import com.opencsv.CSVReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class EnterBarcodeActivity extends AppCompatActivity {
 
     public static final String EXTRA_BARCODE = "com.bavers.lamping.lampshopping.BARCODE";
     public static final String EXTRA_LAMP = "com.bavers.lamping.lampshopping.LAMP";
     public static final String EXTRA_LAMPS = "com.bavers.lamping.lampshopping.LAMPS";
+    public static final String EXTRA_SCANS = "com.bavers.lamping.lampshopping.SCANS";
 
     LampRepository lamps;
 
@@ -113,6 +116,16 @@ public class EnterBarcodeActivity extends AppCompatActivity {
 
         if (barcode.equals("11")) {
             startScanningActivity();
+            return;
+        }
+
+        if (barcode.equals("22")) {
+            Intent intent = new Intent(this, HistoryActivity.class);
+            ArrayList<Scan> scans = new ArrayList<Scan>();
+            Scan scan = Scan.fromBarcode("123456");
+            scans.add(scan);
+            intent.putExtra(EXTRA_SCANS, scans);
+            startActivity(intent);
             return;
         }
 
