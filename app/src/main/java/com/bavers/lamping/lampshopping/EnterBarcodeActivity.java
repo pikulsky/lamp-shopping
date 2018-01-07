@@ -18,8 +18,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class EnterBarcodeActivity extends AppCompatActivity {
 
@@ -46,7 +44,7 @@ public class EnterBarcodeActivity extends AppCompatActivity {
     protected void readLampsFile() {
         try {
             InputStream is = getResources().openRawResource(R.raw.led);
-            InputStreamReader isr = new InputStreamReader(is, Charset.forName("UTF-8"));
+            InputStreamReader isr = new InputStreamReader(is, Charset.forName("Windows-1251"));
             CSVReader reader = new CSVReader(isr, ';', '"', 1);
 
             String [] nextLine;
@@ -122,8 +120,15 @@ public class EnterBarcodeActivity extends AppCompatActivity {
         if (barcode.equals("22")) {
             Intent intent = new Intent(this, HistoryActivity.class);
             ArrayList<Scan> scans = new ArrayList<Scan>();
-            Scan scan = Scan.fromBarcode("123456");
-            scans.add(scan);
+
+            scans.add(getScanForBarcode("4052899926615"));
+            scans.add(getScanForBarcode("4605645002820"));
+            scans.add(getScanForBarcode("4670000010192"));
+            scans.add(getScanForBarcode("4620004422255")); // 5
+            scans.add(getScanForBarcode("4620754506526")); // 0.2
+            scans.add(getScanForBarcode("1028805821633")); // 2.9 IKEA
+            scans.add(getScanForBarcode("2450003089201")); // no rating
+
             intent.putExtra(EXTRA_SCANS, scans);
             startActivity(intent);
             return;
@@ -139,6 +144,15 @@ public class EnterBarcodeActivity extends AppCompatActivity {
             lampDetailsIntent.putExtra(EXTRA_LAMP, lamp);
             startActivity(lampDetailsIntent);
         }
+    }
+
+    private Scan getScanForBarcode(String barcode) {
+        Scan scan = Scan.fromBarcode(barcode);
+        if (lamps.containsBarcode(barcode)) {
+            Lamp lamp = lamps.getLampByBarcode(barcode);
+            scan.setLamp(lamp);
+        }
+        return scan;
     }
 
 }

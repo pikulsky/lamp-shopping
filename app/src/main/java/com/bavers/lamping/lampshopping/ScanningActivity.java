@@ -6,6 +6,10 @@ import android.os.Bundle;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import com.google.zxing.Result;
+
+import java.text.DateFormat;
+import java.util.Date;
+
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 public class ScanningActivity extends BaseScannerActivity implements ZXingScannerView.ResultHandler {

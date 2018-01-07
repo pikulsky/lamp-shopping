@@ -10,6 +10,14 @@ public class Lamp implements Serializable {
     public String barcode;
     public String rating;
 
+    // colors by rating
+    public static final String RATING_COLOR_5       = "#DDFFDC"; // 5+
+    public static final String RATING_COLOR_4       = "#DEFFFE"; // 4 - 4.9
+    public static final String RATING_COLOR_3       = "#FDFFE4"; // 3 - 3.9
+    public static final String RATING_COLOR_2       = "#FFEEDB"; // 2 - 2.9
+    public static final String RATING_COLOR_1       = "#FFDDDD"; // 0 - 1.9
+    public static final String RATING_COLOR_EMPTY   = "#FFFFFF"; // no rating
+
     @Override
     public String toString() {
         return "Lamp{" +
@@ -29,6 +37,25 @@ public class Lamp implements Serializable {
         lamp.rating = values[38];
 
         return lamp;
+    }
+
+    public String getRateColor() {
+        if (rating.isEmpty()) {
+            return RATING_COLOR_EMPTY;
+        }
+
+        float ratingValue = Float.parseFloat(rating);
+        if (ratingValue >= 5) {
+            return RATING_COLOR_5;
+        } else if (ratingValue >= 4) {
+            return RATING_COLOR_4;
+        } else if (ratingValue >= 3) {
+            return RATING_COLOR_3;
+        } else if (ratingValue >= 2) {
+            return RATING_COLOR_2;
+        } else {
+            return RATING_COLOR_1;
+        }
     }
 
     public HashMap<String, String> getAttributes() {
