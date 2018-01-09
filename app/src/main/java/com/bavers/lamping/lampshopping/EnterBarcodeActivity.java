@@ -3,95 +3,34 @@ package com.bavers.lamping.lampshopping;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+import java.io.IOException;
 
-import com.opencsv.CSVReader;
-
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-
-public class EnterBarcodeActivity extends AppCompatActivity {
+public class EnterBarcodeActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     public static final String EXTRA_BARCODE = "com.bavers.lamping.lampshopping.BARCODE";
     public static final String EXTRA_LAMP = "com.bavers.lamping.lampshopping.LAMP";
     public static final String EXTRA_LAMPS = "com.bavers.lamping.lampshopping.LAMPS";
     public static final String EXTRA_SCANS = "com.bavers.lamping.lampshopping.SCANS";
 
-    LampRepository lamps;
+    private LampRepository lamps;
 
     private static final int ZXING_CAMERA_PERMISSION = 1;
-    //private Class<?> mClss;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter_barcode);
-
-        readLampsFile();
-
-    }
-
-    protected void readLampsFile() {
-        try {
-            InputStream is = getResources().openRawResource(R.raw.led);
-            InputStreamReader isr = new InputStreamReader(is, Charset.forName("Windows-1251"));
-            CSVReader reader = new CSVReader(isr, ';', '"', 1);
-
-            String [] nextLine;
-            lamps = new LampRepository();
-
-            while ((nextLine = reader.readNext()) != null) {
-
-                Lamp lamp = Lamp.fromArray(nextLine);
-                lamps.add(lamp);
-
-                //Log.d("Lamp", nextLine[0] + ' ' + nextLine[1] + ' ' + nextLine[2]);
-                //System.out.printf(nextLine[0] + ' ' + nextLine[1] + ' ' + nextLine[2]);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-//    public void launchActivity(Class<?> clss) {
-//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-//                != PackageManager.PERMISSION_GRANTED) {
-//            mClss = clss;
-//            ActivityCompat.requestPermissions(this,
-//                    new String[]{Manifest.permission.CAMERA}, ZXING_CAMERA_PERMISSION);
-//        }
-//
-//        Intent intent = new Intent(this, clss);
-//        startActivity(intent);
-//    }
-
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode,  String permissions[], int[] grantResults) {
-//        switch (requestCode) {
-//            case ZXING_CAMERA_PERMISSION:
-//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    if(mClss != null) {
-//                        Intent intent = new Intent(this, mClss);
-//                        startActivity(intent);
-//                    }
-//                } else {
-//                    Toast.makeText(this, "Please grant camera permission to use the QR Scanner", Toast.LENGTH_SHORT).show();
-//                }
-//                return;
-//        }
-//    }
-
-    private void startScanningActivity() {
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED)
@@ -100,11 +39,57 @@ public class EnterBarcodeActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.CAMERA}, ZXING_CAMERA_PERMISSION);
         }
 
-        Intent intent = new Intent(this, ScanningActivity.class);
-        intent.putExtra(EXTRA_LAMPS, lamps);
-        startActivity(intent);
+        lamps = new LampRepository();
+        // load lamps data from CSV file
+        try {
+            lamps.loadFromFile(this);
+        } catch (IOException e) {
+            Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+        }
 
-        //launchActivity(ScanningActivity.class);
+        // Bottom navigation
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_history:
+                startHistoryActivity();
+                break;
+            case R.id.action_scan:
+                startScanningActivity();
+                break;
+        }
+        return true;
+    }
+
+    private void startHistoryActivity() {
+        Intent intent = new Intent(this, HistoryActivity.class);
+        startActivity(intent);
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,  String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case ZXING_CAMERA_PERMISSION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                    if(mClss != null) {
+//                        Intent intent = new Intent(this, mClss);
+//                        startActivity(intent);
+//                    }
+                } else {
+                    Toast.makeText(this, "Please grant camera permission to use the QR Scanner", Toast.LENGTH_SHORT).show();
+                }
+                return;
+        }
+    }
+
+    private void startScanningActivity() {
+        Intent intent = new Intent(this, ScanningActivity.class);
+        startActivity(intent);
     }
 
     /** Called when the user taps the Search button */
@@ -119,17 +104,17 @@ public class EnterBarcodeActivity extends AppCompatActivity {
 
         if (barcode.equals("22")) {
             Intent intent = new Intent(this, HistoryActivity.class);
-            ArrayList<Scan> scans = new ArrayList<Scan>();
+//            ArrayList<Scan> scans = new ArrayList<Scan>();
 
-            scans.add(getScanForBarcode("4052899926615"));
-            scans.add(getScanForBarcode("4605645002820"));
-            scans.add(getScanForBarcode("4670000010192"));
-            scans.add(getScanForBarcode("4620004422255")); // 5
-            scans.add(getScanForBarcode("4620754506526")); // 0.2
-            scans.add(getScanForBarcode("1028805821633")); // 2.9 IKEA
-            scans.add(getScanForBarcode("2450003089201")); // no rating
+//            scans.add(getScanForBarcode("4052899926615"));
+//            scans.add(getScanForBarcode("4605645002820"));
+//            scans.add(getScanForBarcode("4670000010192"));
+//            scans.add(getScanForBarcode("4620004422255")); // 5
+//            scans.add(getScanForBarcode("4620754506526")); // 0.2
+//            scans.add(getScanForBarcode("1028805821633")); // 2.9 IKEA
+//            scans.add(getScanForBarcode("2450003089201")); // no rating
 
-            intent.putExtra(EXTRA_SCANS, scans);
+//            intent.putExtra(EXTRA_SCANS, scans);
             startActivity(intent);
             return;
         }
@@ -146,13 +131,13 @@ public class EnterBarcodeActivity extends AppCompatActivity {
         }
     }
 
-    private Scan getScanForBarcode(String barcode) {
-        Scan scan = Scan.fromBarcode(barcode);
-        if (lamps.containsBarcode(barcode)) {
-            Lamp lamp = lamps.getLampByBarcode(barcode);
-            scan.setLamp(lamp);
-        }
-        return scan;
-    }
+//    private Scan getScanForBarcode(String barcode) {
+//        Scan scan = Scan.fromBarcode(barcode);
+//        if (lamps.containsBarcode(barcode)) {
+//            Lamp lamp = lamps.getLampByBarcode(barcode);
+//            scan.setLamp(lamp);
+//        }
+//        return scan;
+//    }
 
 }

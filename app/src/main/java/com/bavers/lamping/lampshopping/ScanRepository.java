@@ -34,6 +34,7 @@ public class ScanRepository implements Serializable {
 
     public void loadFromFile(Context context) throws IOException, ClassNotFoundException {
 
+        // TODO check if file exist and set empty list
         FileInputStream fin = context.openFileInput(SCANS_FILE_NAME);
         ObjectInputStream ois = new ObjectInputStream(fin);
         scans = (ArrayList<Scan>) ois.readObject();

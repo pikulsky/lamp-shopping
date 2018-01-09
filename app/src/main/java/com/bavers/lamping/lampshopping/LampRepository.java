@@ -1,10 +1,17 @@
 package com.bavers.lamping.lampshopping;
 
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.opencsv.CSVReader;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -48,4 +55,23 @@ public class LampRepository implements Serializable
         }
         return null;
     }
+
+    public void loadFromFile(Context context) throws IOException {
+        InputStream is = context.getResources().openRawResource(R.raw.led);
+        InputStreamReader isr = new InputStreamReader(is, Charset.forName("Windows-1251"));
+        CSVReader reader = new CSVReader(isr, ';', '"', 1);
+
+        String [] nextLine;
+        lamps.clear();
+
+        while ((nextLine = reader.readNext()) != null) {
+
+            Lamp lamp = Lamp.fromArray(nextLine);
+            add(lamp);
+
+            //Log.d("Lamp", nextLine[0] + ' ' + nextLine[1] + ' ' + nextLine[2]);
+            //System.out.printf(nextLine[0] + ' ' + nextLine[1] + ' ' + nextLine[2]);
+        }
+    }
+
 }
