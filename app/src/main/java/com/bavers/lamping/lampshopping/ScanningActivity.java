@@ -1,31 +1,23 @@
 package com.bavers.lamping.lampshopping;
 
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import com.google.zxing.Result;
+
 import java.io.IOException;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
-public class ScanningActivity extends BaseScannerActivity
-        implements ZXingScannerView.ResultHandler, BottomNavigationView.OnNavigationItemSelectedListener {
+public class ScanningActivity extends ParentActivity
+        implements ZXingScannerView.ResultHandler {
 
-    public static final String EXTRA_SCANS = "com.bavers.lamping.lampshopping.SCANS";
-
+    // barcode scanner
     private ZXingScannerView mScannerView;
-
-    private LampRepository lamps;
-
-    /**
-     * List of scans
-     */
-    private ScanRepository scans;
 
     @Override
     public void onCreate(Bundle state) {
@@ -33,73 +25,40 @@ public class ScanningActivity extends BaseScannerActivity
         setContentView(R.layout.activity_scanning);
         setupToolbar();
 
-//        Intent intent = getIntent();
-//        lamps = (LampRepository) intent.getSerializableExtra(EnterBarcodeActivity.EXTRA_LAMPS);
+        // load lamps
+        initializeLamps();
 
-        // load lamps data from CSV file
-        lamps = new LampRepository();
-        try {
-            lamps.loadFromFile(this);
-        } catch (IOException e) {
-            Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-        }
+        // load scans
+        initializeScans();
 
-        scans = new ScanRepository();
-        try {
-            scans.loadFromFile(this);
-
-            // TODO remove
-//            scans.addScan(getScanForBarcode("4052899926615"));
-//            scans.addScan(getScanForBarcode("4605645002820"));
-//            scans.addScan(getScanForBarcode("4670000010192"));
-//            scans.addScan(getScanForBarcode("4620004422255")); // 5
-//            scans.addScan(getScanForBarcode("4620754506526")); // 0.2
-//            scans.addScan(getScanForBarcode("1028805821633")); // 2.9 IKEA
-//            scans.addScan(getScanForBarcode("2450003089201")); // no rating
-
-        } catch (IOException e) {
-            Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-        } catch (ClassNotFoundException e) {
-            Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-        }
+        // setup bottom navigation
+        initializeBottomNavigation();
 
         ViewGroup contentFrame = (ViewGroup) findViewById(R.id.content_frame);
         mScannerView = new ZXingScannerView(this);
         contentFrame.addView(mScannerView);
+    }
 
-        // Bottom navigation
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+    public void setupToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        final ActionBar ab = getSupportActionBar();
+        if(ab != null) {
+            ab.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_history:
-                startHistoryActivity();
-                break;
-            case R.id.action_type:
-                startEnterBarcodeActivity();
-                break;
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                finish();
+                return true;
         }
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 
-    private void startEnterBarcodeActivity() {
-        Intent intent = new Intent(this, EnterBarcodeActivity.class);
-        startActivity(intent);
-    }
-
-    // TODO remove
-//    private Scan getScanForBarcode(String barcode) {
-//
-//        Scan scan = Scan.fromBarcode(barcode);
-//        if (lamps.containsBarcode(barcode)) {
-//            Lamp lamp = lamps.getLampByBarcode(barcode);
-//            scan.setLamp(lamp);
-//        }
-//        return scan;
-//    }
 
     @Override
     public void onResume() {
@@ -114,36 +73,12 @@ public class ScanningActivity extends BaseScannerActivity
         mScannerView.stopCamera();
     }
 
-    private void startHistoryActivity() {
-        Intent intent = new Intent(this, HistoryActivity.class);
-        // intent.putExtra(EXTRA_SCANS, scans);
-        startActivity(intent);
-    }
-
     @Override
     public void handleResult(Result rawResult) {
 
         String barcode = rawResult.getText();
 
-        Scan scan = Scan.fromBarcode(barcode);
-        if (lamps.containsBarcode(barcode)){
-            Lamp lamp = lamps.getLampByBarcode(barcode);
-            scan.setLamp(lamp);
-
-            String message = "Found lamp for barcode" + barcode;
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-        } else {
-            String message = "Lamp for barcode " + barcode + " not found";
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-        }
-        scans.addScan(scan);
-
-        try {
-            scans.saveToFile(this);
-            Toast.makeText(this, "scans saved", Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
-            Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-        }
+        processBarcode(barcode);
 
         // Note:
         // * Wait 2 seconds to resume the preview.

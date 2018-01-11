@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.bavers.lamping.lampshopping">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.bavers.lamping.lampshopping">
+
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
@@ -12,14 +14,13 @@
         <activity android:name=".EnterBarcodeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".UnknownBarcodeActivity" />
-        <activity android:name=".LampDetailsActivity" />
         <activity android:name=".HistoryActivity" />
-        <activity android:name=".BaseScannerActivity" />
         <activity android:name=".ScanningActivity" />
+        <activity android:name=".ParentActivity"></activity>
     </application>
 
 </manifest>

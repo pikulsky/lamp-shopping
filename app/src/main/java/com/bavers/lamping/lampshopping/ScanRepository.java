@@ -24,6 +24,11 @@ public class ScanRepository implements Serializable {
         this.scans = new ArrayList<Scan>();
     }
 
+    public void clear(Context context) {
+        context.deleteFile(SCANS_FILE_NAME);
+        this.scans = new ArrayList<Scan>();
+    }
+
     public void addScan(Scan scan) {
         scans.add(scan);
     }
