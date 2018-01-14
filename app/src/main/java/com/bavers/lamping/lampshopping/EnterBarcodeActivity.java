@@ -33,7 +33,7 @@ public class EnterBarcodeActivity extends ParentActivity {
         initializeScans();
 
         // setup bottom navigation
-        initializeBottomNavigation();
+        initializeBottomNavigation(R.id.action_type);
     }
 
     @Override

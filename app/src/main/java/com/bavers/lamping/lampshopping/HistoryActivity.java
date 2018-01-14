@@ -22,7 +22,7 @@ public class HistoryActivity extends ParentActivity {
         initializeScans();
 
         // setup bottom navigation
-        initializeBottomNavigation();
+        initializeBottomNavigation(R.id.action_history);
 
         recyclerView = (RecyclerView) findViewById(R.id.scansRecyclerView);
         mAdapter = new ScansAdapter(scans.getScans());

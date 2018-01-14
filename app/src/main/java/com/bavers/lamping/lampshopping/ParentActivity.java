@@ -6,6 +6,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -27,9 +28,14 @@ public class ParentActivity
     // scans
     protected ScanRepository scans;
 
-    protected void initializeBottomNavigation()
+    protected void initializeBottomNavigation(int selectedMenuItemId)
     {
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+
+        // set "selected" menu item
+        Menu menu = bottomNavigationView.getMenu();
+        menu.findItem(selectedMenuItemId).setChecked(true);
+
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
     }
 

@@ -32,7 +32,7 @@ public class ScanningActivity extends ParentActivity
         initializeScans();
 
         // setup bottom navigation
-        initializeBottomNavigation();
+        initializeBottomNavigation(R.id.action_scan);
 
         ViewGroup contentFrame = (ViewGroup) findViewById(R.id.content_frame);
         mScannerView = new ZXingScannerView(this);
