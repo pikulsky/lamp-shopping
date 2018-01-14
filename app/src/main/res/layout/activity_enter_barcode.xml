@@ -16,6 +16,7 @@
         android:ems="10"
         android:hint="@string/enter_barcode"
         android:inputType="number"
+        android:imeOptions="actionSearch"
         app:layout_constraintEnd_toStartOf="@+id/button"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
