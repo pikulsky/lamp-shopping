@@ -37,6 +37,10 @@ public class ScanRepository implements Serializable {
         return scans;
     }
 
+    public Scan get(int position) {
+        return scans.get(position);
+    }
+
     public void loadFromFile(Context context) throws IOException, ClassNotFoundException {
 
         // TODO check if file exist and set empty list

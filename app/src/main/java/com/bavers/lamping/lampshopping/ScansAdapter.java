@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
@@ -21,11 +22,14 @@ public class ScansAdapter extends RecyclerView.Adapter<ScansAdapter.ScanViewHold
 
     private List<Scan> scanList;
 
+
     public class ScanViewHolder extends RecyclerView.ViewHolder {
         public TextView lamp_rate;
         public TableLayout lampRateTableLayout;
         public TextView lamp_title;
         public TextView lamp_description;
+        public RelativeLayout viewForeground;
+        public RelativeLayout viewBackground;
 
         public ScanViewHolder(View view) {
             super(view);
@@ -34,6 +38,8 @@ public class ScansAdapter extends RecyclerView.Adapter<ScansAdapter.ScanViewHold
             lamp_title = (TextView) view.findViewById(R.id.lamp_title);
             lamp_description = (TextView) view.findViewById(R.id.lamp_description);
 
+            viewBackground = view.findViewById(R.id.view_background);
+            viewForeground = view.findViewById(R.id.view_foreground);
         }
     }
 
@@ -76,4 +82,19 @@ public class ScansAdapter extends RecyclerView.Adapter<ScansAdapter.ScanViewHold
     public int getItemCount() {
         return scanList.size();
     }
+
+    public void removeItem(int position) {
+        scanList.remove(position);
+        // notify the item removed by position
+        // to perform recycler view delete animations
+        // NOTE: don't call notifyDataSetChanged()
+        notifyItemRemoved(position);
+    }
+
+    public void restoreItem(Scan item, int position) {
+        scanList.add(position, item);
+        // notify item added by position
+        notifyItemInserted(position);
+    }
+
 }
