@@ -57,4 +57,16 @@ public class ScanRepository implements Serializable {
         oos.writeObject(scans);
         oos.close();
     }
+
+    public int count() {
+        return scans.size();
+    }
+
+    public void remove(int position) {
+        scans.remove(position);
+    }
+
+    public void add(int position, Scan scan) {
+        scans.add(position, scan);
+    }
 }

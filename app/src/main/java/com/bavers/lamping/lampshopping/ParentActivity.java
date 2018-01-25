@@ -120,6 +120,15 @@ public class ParentActivity
         startActivity(intent);
     }
 
+    protected void saveScans()
+    {
+        try {
+            scans.saveToFile(this);
+        } catch (IOException e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
     protected void processBarcode(String barcode)
     {
         Scan scan = Scan.fromBarcode(barcode);
@@ -135,11 +144,6 @@ public class ParentActivity
         }
         scans.addScan(scan);
 
-        try {
-            scans.saveToFile(this);
-            Toast.makeText(this, "scans saved", Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-        }
+        saveScans();
     }
 }
