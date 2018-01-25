@@ -36,7 +36,7 @@ public class HistoryActivity extends ParentActivity
         constraintLayout = findViewById(R.id.constraint_layout);
 
         recyclerView = (RecyclerView) findViewById(R.id.scansRecyclerView);
-        mAdapter = new ScansAdapter(scans.getScans());
+        mAdapter = new ScansAdapter(scans);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -46,7 +46,8 @@ public class HistoryActivity extends ParentActivity
         // only ItemTouchHelper.LEFT added to detect Right to Left swipe
         // if you want both Right -> Left and Left -> Right
         // add pass ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT as param
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback =
+                new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, this);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
 
     }
@@ -71,6 +72,8 @@ public class HistoryActivity extends ParentActivity
             // remove the item from recycler view
             mAdapter.removeItem(viewHolder.getAdapterPosition());
 
+            saveScans();
+
             // showing snack bar with Undo option
             Snackbar snackbar = Snackbar
                     .make(constraintLayout, barcode + " removed from cart!", Snackbar.LENGTH_LONG);
@@ -80,6 +83,8 @@ public class HistoryActivity extends ParentActivity
 
                     // undo is selected, restore the deleted item
                     mAdapter.restoreItem(deletedItem, deletedIndex);
+
+                    saveScans();
                 }
             });
             snackbar.setActionTextColor(Color.YELLOW);
