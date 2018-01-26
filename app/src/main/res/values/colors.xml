@@ -8,4 +8,5 @@
     <color name="secondary_text">#727272</color>
 
     <!-- history list colors -->
+    <color name="bg_row_background">#fa315b</color>
 </resources>

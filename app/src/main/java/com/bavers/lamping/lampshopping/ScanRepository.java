@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class ScanRepository implements Serializable {
 
-    public ArrayList<Scan> scans;
+    private ArrayList<Scan> scans;
 
     private static final String SCANS_FILE_NAME = "scans.dat";
 
@@ -37,6 +37,10 @@ public class ScanRepository implements Serializable {
         return scans;
     }
 
+    public Scan get(int position) {
+        return scans.get(position);
+    }
+
     public void loadFromFile(Context context) throws IOException, ClassNotFoundException {
 
         // TODO check if file exist and set empty list
@@ -52,5 +56,17 @@ public class ScanRepository implements Serializable {
         ObjectOutputStream oos = new ObjectOutputStream(fos);
         oos.writeObject(scans);
         oos.close();
+    }
+
+    public int count() {
+        return scans.size();
+    }
+
+    public void remove(int position) {
+        scans.remove(position);
+    }
+
+    public void add(int position, Scan scan) {
+        scans.add(position, scan);
     }
 }

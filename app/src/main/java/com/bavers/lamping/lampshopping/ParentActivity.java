@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,8 +16,6 @@ public class ParentActivity
     extends AppCompatActivity
     implements BottomNavigationView.OnNavigationItemSelectedListener
 {
-    public static final String EXTRA_BARCODE    = "com.bavers.lamping.lampshopping.BARCODE";
-    public static final String EXTRA_LAMP       = "com.bavers.lamping.lampshopping.LAMP";
     public static final String EXTRA_LAMPS      = "com.bavers.lamping.lampshopping.LAMPS";
     public static final String EXTRA_SCANS      = "com.bavers.lamping.lampshopping.SCANS";
 
@@ -120,6 +117,15 @@ public class ParentActivity
         startActivity(intent);
     }
 
+    protected void saveScans()
+    {
+        try {
+            scans.saveToFile(this);
+        } catch (IOException e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
     protected void processBarcode(String barcode)
     {
         Scan scan = Scan.fromBarcode(barcode);
@@ -135,11 +141,6 @@ public class ParentActivity
         }
         scans.addScan(scan);
 
-        try {
-            scans.saveToFile(this);
-            Toast.makeText(this, "scans saved", Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-        }
+        saveScans();
     }
 }
