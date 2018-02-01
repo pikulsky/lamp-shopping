@@ -4,9 +4,11 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 public class Lamp implements Serializable {
+    // 0
     public String no;
     public String brand;
     public String model;
+    // 8
     public String barcode;
     public String rating;
     // 3, Потребляемая мощность лампы (Вт), заявленная производителем
@@ -51,11 +53,17 @@ public class Lamp implements Serializable {
     public String color_l;
     // 21, Индекс цветопередачи, CRI (Ra) (Заявлено)
     public String ra_l;
+    // 22, Срок работы лампы в часах, заявленный производителем
     public String life;
+    // 23, Гарантия на лампу в месяцах, заявленная производителем
     public String war;
+    // 24, Дата изготовления, MYY
     public String prod;
     // 25, Возможность диммирования и его минимальный уровень (%)
     public String dim;
+    // 26, Измеренная возможность работы с выключателем, имеющим индикатор.
+    // 1 (плюс) поддерживается, 3 (минус) - лампа вспыхивает
+    // 2 (плюс-минус) - лампа слабо светится
     public String swtch; // switch
     // 27, Вт. Измеренная потребляемая мощность в ваттах.
     // Мощность, Вт (Измерено)
@@ -68,23 +76,37 @@ public class Lamp implements Serializable {
     public String color;
     // 31, Индекс цветопередачи, CRI (Ra) (Измерено)
     public String cri;
+    // 32, Измеренный индекс цветопередачи
     public String cqs;
+    // 33, Измеренный индекс передачи красного цвета R9
     public String r9;
+    // 34, Измеренный угол освещения в градусах
     public String angle;
+    // 35, Измеренная пульсация света (%)
     public String flicker;
+    // 36, Коэффициент мощности
     public String pf;
     // 37, Дата тестирования, DD.MM.YYYY
     public String date;
     // 39, Напряжение рабочее, минимальное, В (Измерено)
     public String umin;
+    // 40, Тип драйвера. 1 - импульсный (яркость не меняется),
+    // 2 - импульсный (отключается),
+    // 3 - импульсный (мигать), 4 - линейный
     public String drv;
+    // 41, Максимальная температура корпуса лампы
     public String tmax;
-    // 48, Актуальность лампы, 0/1
+    // 42, Актуальность лампы, 0/1
     public String act;
+    // 43,
     public String add1;
+    // 44,
     public String add2;
+    // 45,
     public String add3;
+    // 46,
     public String add4;
+    // 47,
     public String add5;
 
     // colors by rating
